@@ -1,0 +1,69 @@
+Prompt 1: Entertainment news article scraping
+In scraper.py, write a function called scrape_entertainment(page) that:
+- Navigates to https://ekantipur.com/entertainment using Playwright
+- Waits for the page to load
+- Extracts top 5 articles, each with: title, image_url, category, author
+- Returns a list of dictionaries
+- Handles errors with try/except and returns empty list on failure
+
+Prompt 2: Cartoon of the day scraping
+In scraper.py, write a separate function called scrape_cartoon(page) that:
+- Navigates to https://ekantipur.com/cartoon using Playwright
+- Waits for the page to load
+- Extracts the cartoon of the day with: title, image_url, author
+- Returns a single dictionary
+- Handles errors with try/except and returns None values on failure
+
+Prompt 3: Helper functions
+Write two helper functions for Playwright scraping:
+1. safe_text(element, selector) — returns inner text of child element or None if not found
+2. safe_attr(element, selector, attr) — returns attribute value of child element or None
+Wrap both in try/except so they never crash the script.
+
+Prompt 4: Entertainment selectors
+Update the entertainment scraper with these HTML selectors from ekantipur.com:
+- Article card: div.category > div.category-inner-wrapper
+- Title: div.category-description h2
+- Author: div.category-description div.author-name p a
+- Image: div.category-image a figure img.loaded
+- Category: hardcode as 'मनोरञ्जन' since we are on the entertainment page
+
+Prompt 5: Cartoon selectors
+Update the cartoon scraper with these confirmed HTML selectors from ekantipur.com/cartoon:
+- Wrapper: .cartoon-wrapper
+- Image: .cartoon-image figure a img.loaded
+- Title and author: .cartoon-description p
+- Author specifically: .cartoon-description p 
+
+Prompt 6: main function
+In scraper.py, write a main() function that:
+- Launches Chromium browser using Playwright with headless=False
+- Creates a browser context with a real Chrome user_agent, viewport 1280x800, locale ne-NP
+- Opens a new page
+- Calls scrape_entertainment(page) and scrape_cartoon(page)
+- Stores results in a dictionary with keys entertainment_news and cartoon_of_the_day
+- Closes the browser after scraping
+
+Prompt 7: JSON file
+Save the scraped data to output.json with this exact structure:
+{
+  'entertainment_news': [
+    { 'title': '...', 'image_url': '...', 'category': '...', 'author': '...' }
+  ],
+  'cartoon_of_the_day': {
+    'title': '...', 'image_url': '...', 'author': '...'
+  }
+}
+Use json.dump with ensure_ascii=False and indent=2.
+
+Prompt 8: Debugging
+Add meaningful print statements to scraper.py for debugging and progress tracking:
+- In scrape_entertainment(): print when navigation starts, page loaded, total cards found, each article title extracted, total extracted at end
+- In scrape_cartoon(): print when search starts, when cartoon section is found, cartoon title and author when extracted
+- In main(): print when scraping starts, when each task completes, and final done message with output file name
+
+Prompt 9: Image loading
+The images on ekantipur.com are lazy loaded. Add scroll and wait logic after page loads:
+1. Scroll halfway down using window.scrollTo
+2. Wait 2 seconds for images to load
+3. Wait for img.loaded selector to confirm images are ready
